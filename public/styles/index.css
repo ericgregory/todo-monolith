@@ -1,0 +1,64 @@
+body {
+    min-width: 60%;
+    width: 94%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3%;
+    background-color: rgb(255, 255, 255);
+}
+
+.container {
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-bottom: 3%;
+}
+
+h1 {
+    color:rgba(0, 0, 0, 0.653);
+    font-size: 100px;
+    font-family: 'Roboto', sans-serif;
+    margin-bottom: 3px;
+}
+
+#emoji {
+    text-decoration: none;
+    float: right;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+#tasks_container {
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+#item_style {
+    font-family: 'Roboto', sans-serif;
+    font-size: xx-large;
+    background-color:rgba(0, 0, 0, 0.083);
+    width: 46%;
+    padding: 2%;
+}
+
+#task {
+    padding: 2% 2%;
+    min-width: 46%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: xx-large;
+    font-family: 'Roboto';
+}
+
+#task::placeholder {
+    font-style: italic;
+    color:rgba(0, 0, 0, 0.164);
+
+}
+
+.ongoing {
+    color:rgba(0, 0, 0, 0.653);
+}
+.completed {
+    text-decoration: line-through;
+    color: gray;
+}
