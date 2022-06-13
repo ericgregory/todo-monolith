@@ -2,10 +2,13 @@ const express = require('express');
 const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser');
 const con = require('./models/taskModel')
+const authRouter = require('./auth/auth');
 
 const app = express();
 
 app.use(express.static('public'));
+
+app.use('/', authRouter);
 
 app.engine('handlebars', engine({
     helpers: {
@@ -42,23 +45,34 @@ app.get('/', (req, res) => {
 });
 
 app.get('/:status/:id', (req, res) => {
+let intCheck = req.params.id * 1;
+if (Number.isInteger(intCheck)) {
     console.log(req.params)
     let query = "UPDATE Todo SET status='" + req.params.status + "' WHERE task_id=" + req.params.id
     con.query(query, (err, result) => {
         if (err) throw err;
         console.log(result)
         res.redirect('/')
-    })
+    });
+} else {
+    res.redirect('/');
+};
 });
 
 app.get('/:id', (req, res) => {
+// Validation to ensure req is an integer
+let intCheck = req.params.id * 1;
+if (Number.isInteger(intCheck)) {
     console.log(req.params)
-    let query = "DELETE FROM Todo WHERE task_id=" + req.params.id
-    con.query(query, (err, result) => {
-        if (err) throw err;
-        console.log(result)
-        res.redirect('/')
+        let query = "DELETE FROM Todo WHERE task_id=" + req.params.id
+        con.query(query, (err, result) => {
+          if (err) throw err;
+          console.log(result);
+          res.redirect('/');
     })
+} else {
+    res.redirect('/');
+}
 });
 
 app.post('/', (req, res) => {
