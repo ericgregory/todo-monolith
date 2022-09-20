@@ -1,14 +1,11 @@
 const express = require('express');
 const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser');
-const con = require('./models/taskModel')
-const authRouter = require('./auth/auth');
+const con = require('./models/taskModel');
 
 const app = express();
 
 app.use(express.static('public'));
-
-app.use('/', authRouter);
 
 app.engine('handlebars', engine({
     helpers: {
@@ -31,17 +28,18 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-    let query = "SELECT * FROM Todo";
-    let items = []
-    con.query(query, (err, result) => {
-        if (err) throw err;
-        items = result
-        console.log(items)
-        res.render('index', {
-            items: items
+app.get('/', (req, res) => { 
+        let query = 'SELECT * FROM Todo';
+        let items = []
+        con.execute(query, (err, result) => {
+            if (err) throw err;
+            items = result;
+            console.log(items);
+            res.render('index', {
+                items: items
+            }
+            )
         })
-    })
 });
 
 app.get('/:status/:id', (req, res) => {
@@ -49,7 +47,7 @@ let intCheck = req.params.id * 1;
 if (Number.isInteger(intCheck)) {
     console.log(req.params)
     let query = "UPDATE Todo SET status='" + req.params.status + "' WHERE task_id=" + req.params.id
-    con.query(query, (err, result) => {
+    con.execute(query, (err, result) => {
         if (err) throw err;
         console.log(result)
         res.redirect('/')
@@ -65,7 +63,7 @@ let intCheck = req.params.id * 1;
 if (Number.isInteger(intCheck)) {
     console.log(req.params)
         let query = "DELETE FROM Todo WHERE task_id=" + req.params.id
-        con.query(query, (err, result) => {
+        con.execute(query, (err, result) => {
           if (err) throw err;
           console.log(result);
           res.redirect('/');
@@ -76,7 +74,7 @@ if (Number.isInteger(intCheck)) {
 });
 
 app.post('/', (req, res) => {
-    console.log(req.body)
+    console.log(req.body.task)
     let query = "INSERT INTO Todo (task, status) VALUES ?";
     data = [
         [req.body.task, "ongoing"]
