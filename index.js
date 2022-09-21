@@ -1,11 +1,18 @@
+// Includes required modules
+
 const express = require('express');
 const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser');
-const con = require('./models/taskModel');
+
+// Breaks out db connection and schema into its own module
+
+const con = require('./models/taskModel'); 
 
 const app = express();
 
 app.use(express.static('public'));
+
+// Configures app to use handlebars as view engine
 
 app.engine('handlebars', engine({
     helpers: {
@@ -22,11 +29,15 @@ app.engine('handlebars', engine({
 app.set('view engine', 'handlebars');
 app.set('views', './views');
 
+// Initializes body-parser to handle JSON and form body request bodies
+
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 
 app.use(bodyParser.json());
+
+// Handles GET requests to index by querying db and returning items to render
 
 app.get('/', (req, res) => { 
         let query = 'SELECT * FROM Todo';
@@ -42,6 +53,8 @@ app.get('/', (req, res) => {
         })
 });
 
+// Upon GET request to status/id, updates status for that task
+
 app.get('/:status/:id', (req, res) => {
 let intCheck = req.params.id * 1;
 if (Number.isInteger(intCheck)) {
@@ -56,6 +69,8 @@ if (Number.isInteger(intCheck)) {
     res.redirect('/');
 };
 });
+
+// Upon GET request to /id, deletes the task
 
 app.get('/:id', (req, res) => {
 // Validation to ensure req is an integer
@@ -73,6 +88,8 @@ if (Number.isInteger(intCheck)) {
 }
 });
 
+// Handles POST requests to index, adds new task
+
 app.post('/', (req, res) => {
     console.log(req.body.task)
     let query = "INSERT INTO Todo (task, status) VALUES ?";
@@ -86,7 +103,8 @@ app.post('/', (req, res) => {
     })
 });
 
-// port where app is served
+// Port where the app is served
+
 app.listen(3000, () => {
     console.log('The web server has started on port 3000');
 });

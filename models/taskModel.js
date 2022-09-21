@@ -1,4 +1,8 @@
+// Requires db driver
+
 var mysql = require('mysql2');
+
+// Establishes db connection
 
 var con = mysql.createConnection({
     host: "localhost",
@@ -7,7 +11,7 @@ var con = mysql.createConnection({
     database: "todo_db"
 });
 
-// create the database schema for the todos app
+// Creates the database schema for the todos app
 
 con.connect(function (err) {
     if (err) throw err;
@@ -18,5 +22,7 @@ con.connect(function (err) {
       console.log(result)
   })
 });
+
+// Exports connection variable
 
 module.exports = con;
